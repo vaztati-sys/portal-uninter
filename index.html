@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal do Aluno — UNINTER</title>
+  <meta name="theme-color" content="#0033A0">
+  <link rel="manifest" href="./manifest.json?v=1">
+  <style>
+    :root{--blue:#0033A0;--red:#E2231A;--gold:#A57C00;--bg:#0b1833;--panel:#0f2248;--line:#1c3470;--text:#eef3ff;--muted:#b8c7ea}
+    :root[data-theme="light"]{--bg:#f3f7ff;--panel:#ffffff;--line:#e1e8f8;--text:#0b1833;--muted:#516089}
+    *{box-sizing:border-box}html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;background:var(--bg);color:var(--text)}
+    h2{margin:0 0 .5rem 0;color:#fff}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--panel);border-bottom:6px solid var(--blue)}
+    .brand{display:flex;align-items:center;gap:.7rem}.brand img{height:40px}
+    .title{font-weight:900;letter-spacing:.3px}.title small{display:block;font-weight:600;opacity:.9;color:var(--muted)}
+    .layout{display:grid;grid-template-columns:260px 1fr;gap:1rem;max-width:1280px;margin:1rem auto;padding:0 1rem}
+    @media (max-width:880px){.layout{grid-template-columns:1fr}.sidebar{position:static}}
+    .sidebar{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:.6rem;position:sticky;top:64px;height:fit-content}
+    .navlink{display:block;width:100%;text-align:left;padding:.7rem .8rem;margin:.25rem 0;border:1px solid transparent;background:transparent;border-radius:10px;color:var(--text);cursor:pointer}
+    .navlink:hover{background:rgba(255,255,255,.05)}.navlink.active{background:var(--blue);color:#fff;border-color:#002a82}
+    .panel{background:var(--panel);border:1px solid var(--gold);border-radius:16px;margin-bottom:1rem;padding:1rem 1.25rem;box-shadow:0 10px 28px rgba(3,8,20,.35)}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}@media (max-width:720px){.grid-3{grid-template-columns:1fr}}
+    .kpi{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:.9rem}
+    .kpi-label{opacity:.85;font-size:.8rem;color:var(--muted)}.kpi-value{font-size:1.45rem;font-weight:900;margin-top:.25rem}
+    table{width:100%;border-collapse:separate;border-spacing:0 6px}thead th{font-size:.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+    tbody tr{background:rgba(255,255,255,.04);border:1px solid var(--line)}td,th{padding:.75rem .8rem;text-align:left}
+    .list{list-style:none;margin:0;padding:0}.chip{background:var(--blue);color:#fff;border:1px solid #002a82;border-radius:999px;padding:.5rem 1rem;cursor:pointer;text-decoration:none;display:inline-block}
+    .hidden{display:none}.idcard{display:flex;align-items:center;gap:12px;margin:4px 0 16px 0}.avatar{width:76px;height:76px;border-radius:999px;background-size:cover;background-position:center;border:2px solid var(--blue)}
+    input{width:100%;padding:.6rem .7rem;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text)}
+    label{display:block;margin-bottom:.3rem;color:var(--muted)}.profile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}@media (max-width:720px){.profile-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><img src="estacio-logo.png" alt="UNINTER"/><div class="title">Portal do Aluno <small>Centro Universitário Internacional - Pós Graduação</small></div></div>
+  <button id="btn-theme" class="chip">Tema</button>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <button class="navlink active" data-section="resumo">Resumo</button>
+    <button class="navlink" data-section="disciplinas">Disciplinas</button>
+    <button class="navlink" data-section="calendario">Calendário</button>
+    <button class="navlink" data-section="financeiro">Financeiro</button>
+    <button class="navlink" data-section="historico">Histórico</button>
+    <button class="navlink" data-section="perfil">Perfil</button>
+  </aside>
+
+  <main>
+    <section id="section-resumo" class="panel">
+      <div class="idcard">
+        <div class="avatar" style="background-image:url('foto.jpg')"></div>
+        <div>
+          <div class="name" style="font-weight:900">Jessica Brenda de paula Amorim</div>
+          <div class="muted">Direito Ambiental</div>
+          <div class="muted">CPF: 019.572.262-00 • Nasc.: 02/04/1993</div>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="kpi"><div class="kpi-label">Matrícula</div><div class="kpi-value">139920258883</div></div>
+        <div class="kpi"><div class="kpi-label">Coeficiente</div><div class="kpi-value">8.6</div></div>
+        <div class="kpi"><div class="kpi-label">Créditos</div><div class="kpi-value">64</div></div>
+      </div>
+      <div class="panel" style="margin-top:1rem"><h2>Comunicados</h2><ul id="lista-comunicados" class="list"></ul></div>
+    </section>
+
+    <section id="section-disciplinas" class="panel hidden">
+      <h2>Disciplinas</h2>
+      <table><thead><tr><th>Código</th><th>Disciplina</th><th>Professor(a)</th><th>Frequência</th><th>Média</th></tr></thead><tbody id="tbody-disciplinas"></tbody></table>
+    </section>
+
+    <section id="section-calendario" class="panel hidden">
+      <h2>Calendário</h2><ul id="lista-eventos" class="list"></ul>
+    </section>
+
+    <section id="section-financeiro" class="panel hidden">
+      <h2>Financeiro</h2><p class="muted">Instituição privada — <strong>curso pago</strong>.</p>
+      <table><thead><tr><th>Mês</th><th>Referência</th><th>Vencimento</th><th>Valor</th><th>Status</th><th>Ação</th></tr></thead><tbody id="tbody-financeiro"></tbody></table>
+      <div style="margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap">
+        <button id="btn-declaracao" class="chip">Declaração de Matrícula</button>
+        <button id="btn-vinculo" class="chip">Declaração de Vínculo</button>
+        <button id="btn-atestado" class="chip">Atestado de Matrícula</button>
+        <button id="btn-historico-pdf" class="chip">Histórico Completo</button>
+      </div>
+    </section>
+
+    <section id="section-historico" class="panel hidden">
+      <h2>Histórico Escolar</h2>
+      <table><thead><tr><th>Período</th><th>CR</th><th>Créditos</th><th>Disciplinas</th></tr></thead><tbody id="tbody-historico"></tbody></table>
+      <div id="historico-detalhes" class="panel hidden" style="margin-top:1rem"><h3 id="detalhes-titulo">Detalhes do período</h3><div id="detalhes-conteudo"></div></div>
+    </section>
+
+    <section id="section-perfil" class="panel hidden">
+      <h2>Perfil</h2>
+      <div class="idcard" style="margin-top:.25rem"><div class="avatar" style="background-image:url('foto.jpg')"></div><div><div class="name">Jessica Brenda de paula Amorim</div><div class="muted">Gestão Ambiental</div></div></div>
+      <form id="perfil-form" class="profile-grid">
+        <div><label>Nome</label><input id="pf-nome" type="text" value="Jessica Brenda de paula Amorim" required/></div>
+        <div><label>E‑mail</label><input id="pf-email" type="email" value="jessica.brenda@uninter.br" required/></div>
+        <div><label>Matrícula</label><input id="pf-matricula" type="text" value="139920258883" disabled/></div>
+        <div><label>CPF</label><input id="pf-cpf" type="text" value="019.572.262-00"/></div>
+        <div><label>Data de Nascimento</label><input id="pf-nasc" type="text" value="02/04/1993"/></div>
+        <div style="display:flex;justify-content:flex-end;align-items:end"><button class="chip" type="submit">Salvar</button></div>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  // Util
+  function qs(sel, root){ return (root||document).querySelector(sel); }
+  function qsa(sel, root){ return Array.from((root||document).querySelectorAll(sel)); }
+  function toBR(iso){ try{ var p=iso.split('-'); return p.length===3 ? (p[2]+'/'+p[1]+'/'+p[0]) : iso; }catch(e){ return iso; } }
+
+  // Dados (PLACEHOLDERS — troque pelos seus textos)
+  window.DATA = {
+    aluno: { nome: "Pablo Luiz Ferreira Pereira", matricula: "269877453658", cr: 8.6, creditos: 64,
+             email: "pablo.luiz@estacio.br", curso: "Administração", turno: "Noite", campus: "Centro",
+             cpf: "101.247.667-73", nasc: "30/08/1981" },
+    disciplinas: [
+  { codigo: "GA1001", nome: "Fundamentos de Ecologia",                professor: "Profa. M. Ribeiro",  frequencia: "95%", media: 8.8 },
+  { codigo: "GA1002", nome: "Legislação e Política Ambiental",        professor: "Prof. J. Almeida",   frequencia: "92%", media: 8.4 },
+  { codigo: "GA1003", nome: "Gestão de Resíduos Sólidos",            professor: "Profa. C. Santos",   frequencia: "94%", media: 8.7 },
+  { codigo: "GA1004", nome: "Sistemas de Gestão Ambiental (ISO 14001)", professor: "Prof. R. Martins", frequencia: "90%", media: 8.2 },
+  { codigo: "GA1005", nome: "Recuperação de Áreas Degradadas",       professor: "Profa. T. Oliveira", frequencia: "93%", media: 8.6 },
+  { codigo: "GA1006", nome: "Gestão de Recursos Hídricos",           professor: "Prof. V. Costa",     frequencia: "96%", media: 9.0 }
+    ],
+    eventos: [
+      { data: "2025-09-20", titulo: "Seminário de Branding" },
+      { data: "2025-10-05", titulo: "Apresentação final de Pesquisa de Mercado" }
+    ],
+    comunicados: [
+      { data: "2025-09-05", titulo: "Rematrícula aberta para o próximo período." },
+      { data: "2025-09-02", titulo: "Calendário acadêmico atualizado." }
+    ],
+    historico: [
+  { periodo: "2024.2", cr: 8.6, creditos: 30, disciplinas: [
+    { codigo: "GA0901", nome: "Geoprocessamento Aplicado",         media: 8.5, status: "Aprovado" },
+    { codigo: "GA0902", nome: "Climatologia e Mudanças Climáticas",media: 8.7, status: "Aprovado" },
+    { codigo: "GA0903", nome: "Educação Ambiental",                media: 8.6, status: "Aprovado" }
+  ]},
+  { periodo: "2024.1", cr: 8.3, creditos: 28, disciplinas: [
+    { codigo: "GA0801", nome: "Química Ambiental",                 media: 8.2, status: "Aprovado" },
+    { codigo: "GA0802", nome: "Economia e Sustentabilidade",       media: 8.4, status: "Aprovado" },
+    { codigo: "GA0803", nome: "Sociologia Ambiental",              media: 8.3, status: "Aprovado" }
+  ]}
+  ],
+    financeiro: [
+      { mes: "Jul/2025", ref: "Mensalidade — 1/6", venc: "2025-07-25", valor: 890.00, status: "Pago" },
+      { mes: "Ago/2025", ref: "Mensalidade — 2/6", venc: "2025-08-25", valor: 890.00, status: "Pago" },
+      { mes: "Set/2025", ref: "Mensalidade — 3/6", venc: "2025-09-25", valor: 890.00, status: "Pendente" }
+    ]
+  };
+
+  // Render functions
+  function renderResumo(){ qs("#lista-comunicados").innerHTML = DATA.comunicados.map(c=>`<li><strong>${toBR(c.data)}</strong> — ${c.titulo}</li>`).join(""); }
+  function renderDisciplinas(){ qs("#tbody-disciplinas").innerHTML = DATA.disciplinas.map(d=>`<tr><td>${d.codigo}</td><td>${d.nome}</td><td>${d.professor}</td><td>${d.frequencia}</td><td>${d.media}</td></tr>`).join(""); }
+  function renderEventos(){ qs("#lista-eventos").innerHTML = DATA.eventos.map(e=>`<li><strong>${toBR(e.data)}</strong> — ${e.titulo}</li>`).join(""); }
+  function renderFinanceiro(){
+    qs("#tbody-financeiro").innerHTML = DATA.financeiro.map((f,i)=>{
+      const valor = (typeof f.valor==='number'&&f.valor>0)?('R$ '+f.valor.toFixed(2).replace('.',',')):'—';
+      return `<tr><td>${f.mes}</td><td>${f.ref}</td><td>${toBR(f.venc)}</td><td>${valor}</td><td>${f.status}</td><td><a href="#" class="chip recibo" data-rec="${i}">Recibo</a></td></tr>`;
+    }).join("");
+  }
+  function renderHistorico(){
+    const tb = qs("#tbody-historico");
+    tb.innerHTML = DATA.historico.map((h,i)=>`<tr><td>${h.periodo}</td><td>${h.cr}</td><td>${h.creditos}</td><td><button class="chip" data-i="${i}">Ver detalhes</button></td></tr>`).join("");
+    qsa("button[data-i]", tb).forEach(btn => btn.addEventListener("click", ()=>{
+      const item = DATA.historico[parseInt(btn.getAttribute("data-i"))];
+      const box = qs("#historico-detalhes"); const cont = qs("#detalhes-conteudo");
+      qs("#detalhes-titulo").textContent = "Disciplinas — " + item.periodo;
+      cont.innerHTML = item.disciplinas.map(d=>`<div style='padding:.35rem 0;border-bottom:1px dashed var(--line)'><strong>${d.codigo}</strong> — ${d.nome} • Média: ${d.media} • ${d.status}</div>`).join("");
+      box.classList.remove("hidden"); box.scrollIntoView({behavior:"smooth", block:"start"});
+    }));
+  }
+
+  // Navegação robusta
+  function bindNav(){
+    const sections = {
+      resumo: qs("#section-resumo"),
+      disciplinas: qs("#section-disciplinas"),
+      calendario: qs("#section-calendario"),
+      financeiro: qs("#section-financeiro"),
+      historico: qs("#section-historico"),
+      perfil: qs("#section-perfil")
+    };
+    qsa(".navlink").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        qsa(".navlink").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        const key = btn.dataset.section;
+        Object.keys(sections).forEach(k => sections[k].classList.toggle("hidden", k!==key));
+        if(key==='disciplinas') renderDisciplinas();
+        if(key==='calendario') renderEventos();
+        if(key==='financeiro') renderFinanceiro();
+        if(key==='historico') renderHistorico();
+      });
+    });
+  }
+
+  // Impressos (simplificado)
+  function buildDocHTML(title, logoPath, bodyHtml){
+    return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${title}</title>
+    <style>:root{--blue:#0033A0;--red:#E2231A}body{font-family:Arial,Helvetica,sans-serif;margin:40px}
+    h1{font-size:20px}.head{display:flex;gap:12px;align-items:center;border-bottom:3px solid var(--blue);padding-bottom:10px;margin-bottom:14px}
+    img.logo{height:38px}.meta{color:#333;margin:6px 0 12px 0}.footer{margin-top:22px;padding-top:10px;border-top:2px solid var(--blue);display:flex;align-items:center;justify-content:space-between;color:#333}
+    .seal{border:2px solid var(--red);color:var(--red);border-radius:999px;padding:6px 10px;font-weight:700;letter-spacing:.6px;opacity:.9}</style></head>
+    <body><div class="head"><img class="logo" src="${logoPath}"/><h1>${title}</h1></div>${bodyHtml}<div class="footer"><div>Centro Universitário Internacional</div></div></body></html>`;
+  }
+  function openDoc(html){
+    const w = window.open('', '_blank');
+    if (w && w.document){ w.document.write(html); w.document.close(); }
+    else { const blob=new Blob([html],{type:'text/html'}); const url=URL.createObjectURL(blob); window.location.href=url; }
+  }
+  function genVerification(){ return (Date.now().toString(36).toUpperCase()).slice(-10); }
+  function openPrintable(kind, idx){
+    const p = DATA.aluno; const hoje = new Date().toLocaleDateString('pt-BR');
+    const meta = `<div class="meta">Emitido em ${hoje}<br/>Aluno(a): <strong>${p.nome}</strong> • Matrícula: <strong>${p.matricula}</strong><br/>Curso: ${p.curso} • Turno: ${p.turno} • Campus: ${p.campus}</div>`;
+    let title='', body='';
+    if(kind==='declaracao'){ title='Declaração de Matrícula'; body=`<p>Declaramos que <strong>${p.nome}</strong> está regularmente matriculado(a).</p>`; }
+    if(kind==='vinculo'){ title='Declaração de Vínculo'; body=`<p>Atestamos que <strong>${p.nome}</strong> mantém vínculo ativo com esta Instituição.</p>`; }
+    if(kind==='atestado'){ title='Atestado de Matrícula'; body=`<p><strong>${p.nome}</strong> realiza carga de <strong>${p.creditos}</strong> créditos neste período.</p>`; }
+    if(kind==='historico'){
+      title='Histórico Escolar — Síntese';
+      body = DATA.historico.map(h=>`<h3>Período ${h.periodo} — CR ${h.cr} — Créditos ${h.creditos}</h3><ul>`+
+        h.disciplinas.map(d=>`<li>${d.codigo} — ${d.nome} — Média ${d.media} — ${d.status}</li>`).join('')+
+        `</ul>`).join('<hr/>');
+    }
+    if(kind==='recibo'){
+      const f=DATA.financeiro[idx]; const val=(typeof f.valor==='number'&&f.valor>0)?('R$ '+f.valor.toFixed(2).replace('.',',')):'—';
+      title='Comprovante de Pagamento'; body=`<p>Referência: <strong>${f.ref}</strong><br/>Mês: ${f.mes}<br/>Vencimento: ${toBR(f.venc)}<br/>Valor: ${val}<br/>Status: <strong>${f.status}</strong></p>`;
+    }
+    body += `<p><em>Código de verificação:</em> ${genVerification()}</p>`;
+    const html = buildDocHTML(title, "estacio-logo.png", meta+body);
+    openDoc(html);
+  }
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a.recibo[data-rec]');
+    if(a){ e.preventDefault(); openPrintable('recibo', parseInt(a.getAttribute('data-rec'))); }
+    if(e.target && e.target.id==='btn-declaracao'){ e.preventDefault(); openPrintable('declaracao'); }
+    if(e.target && e.target.id==='btn-vinculo'){ e.preventDefault(); openPrintable('vinculo'); }
+    if(e.target && e.target.id==='btn-atestado'){ e.preventDefault(); openPrintable('atestado'); }
+    if(e.target && e.target.id==='btn-historico-pdf'){ e.preventDefault(); openPrintable('historico'); }
+  });
+
+  // Init seguro
+  window.addEventListener('DOMContentLoaded', function(){
+    // tema
+    qs('#btn-theme').addEventListener('click', function(){
+      const c=document.documentElement.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', c==='light'?'dark':'light');
+    });
+    bindNav();
+    renderResumo();
+  });
+})();
+</script>
+
+<script>
+// PWA (opcional)
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
